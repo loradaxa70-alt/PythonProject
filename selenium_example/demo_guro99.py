@@ -17,6 +17,8 @@ driver.implicitly_wait(10)
 
 driver.get ('https://demo.guru99.com/test/newtours/index.php')
 
+
+
 user= driver.find_element(By.ID,'userName')
 user.click()
 user.clear()
