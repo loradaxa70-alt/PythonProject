@@ -1,7 +1,9 @@
+import time
 import unittest
 
 import self
 from cffi.cffi_opcode import CLASS_NAME
+from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 
@@ -18,10 +20,14 @@ class PizzaHutTests (unittest.TestCase):
     def tearDown(self):
         self.base.selenium_stop()
 
+
+
     def test_returning_to_welcome_page(self):
         self.driver.find_element(By.LINK_TEXT,"School lunch").click()
         self.welcome_page.returning_to_welcome_page()
         print('back to welcome page successfully')
+
+
 
     def test_customerservice_buttons_exist(self):
         button_text=self.welcome_page.click_button_and_get_text('Contact us')
@@ -49,6 +55,7 @@ class PizzaHutTests (unittest.TestCase):
         print('Pizza Hut Store Finder button excsits')
 
 
+
     def test_empty_shopping_cart(self):
         shopping_cart=self.driver.find_element(By.CLASS_NAME,"css-1h8ch3n")
         text = shopping_cart.text
@@ -57,79 +64,39 @@ class PizzaHutTests (unittest.TestCase):
         assert counter ==0 , "Shopping Cart did not include 0 "
 
 
-    def test_pizza_menu(self):
-        menu_button=self.driver.find_element(By.LINK_TEXT,"PIZZA MENU")
-        menu_button.click()
-        cheese_pizza=self.driver.find_element(By.CLASS_NAME,"MuiTypography-root MuiTypography-body1 jss1970 css-dfadvx").text()
-        peperoni_pizza=self.driver.find_element(By,CLASS_NAME,"MuiTypography-root MuiTypography-body1 jss3283 css-dfadvx").text()
-        if cheese_pizza=='Cheese Pizza' and peperoni_pizza=='Pepperoni Pizza':
-            print('pizza menu is valid')
+
+    def test_pizza_menu_button(self):
+        time.sleep(3)
+        pizza_menu_button=self.driver.find_elements(By.CSS_SELECTOR, 'div >div.css-ug2o6l > a')[1]
+        pizza_menu_button_read =pizza_menu_button.text
+        assert pizza_menu_button_read=='PIZZA MENU', 'Pizza menu button text is not as expected'
+        print('Pizza menu button exsists')
+
+
+
+    def test_pizza_menu_url(self):
+        self.driver.get('https://www.pizzahut.com/menu/pizza')
+        print('correct url to pizza menu')
+
 
 
     def test_finding_store(self):
-        self.driver.find_element(By.CSS_SELECTOR,"span[class='css-1sji35f']").click()
+        carry_out_button=self.driver.find_element(By.CLASS_NAME,'css-1qy7znf')
+        time.sleep(4)
+        carry_out_button.click()
+        location_field=self.driver.find_element(By.ID,"carryout-city-state-zip")
+        location_field.send_keys('10001')
+        search_button=self.driver.find_elements(By.CSS_SELECTOR,'button[class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-fullWidth css-aoy6ko"]')[0]
+        search_button.click()
+        right_location=self.driver.find_element(By.CSS_SELECTOR,'div["MuiGrid-root MuiGrid-item css-1wxaqej"]')
+        right_location_reading=right_location.text
+        assert 'NEW YORK, NY 10011' in right_location_reading, 'location text is not as expected'
+        print('location text is as expected')
 
 
 
 
 
-
-
-    # def test_product_search(self):
-    #
-    #
-    #
-    # def test_returning_to_welcome_page(self):
-    #     self.driver.find_element(By.ID,"utilityNav-registries").click()
-    #     self.welcome_page.returning_to_welcome_page()
-    #     print('back to welcome page successfully')
-    #
-    #
-    # def test_six_buttons_exsist(self):
-    #     button_text=self.welcome_page.click_button_and_get_text('Weekly Ad')
-    #     assert button_text == 'Weekly Ad', 'Weekly ad button text is not as expected'
-    #     print('Weekly ad button excsits')
-    #
-    #     button_text = self.welcome_page.click_button_and_get_text('Find Stores')
-    #     assert button_text == 'Find Stores', 'Find Stores button text is not as expected'
-    #     print('Find Stores button excsits')
-    #
-    #     button_text = self.welcome_page.click_button_and_get_text('Registry & Wish List')
-    #     assert button_text == 'Registry & Wish List', 'Registry & Wish List button text is not as expected'
-    #     print('Registry & Wish List button excsits')
-    #
-    #     button_text = self.welcome_page.click_button_and_get_text('Target Circle 360™')
-    #     assert button_text == 'Target Circle 360™', 'Target Circle 360™ button text is not as expected'
-    #     print('Target Circle 360™ button excsits')
-    #
-    #     button_text = self.welcome_page.click_button_and_get_text('Target Circle™ Card')
-    #     assert button_text == 'Target Circle™ Card', 'Target Circle™ Card button text is not as expected'
-    #     print('Target Circle™ Card button excsits')
-    #
-    #     button_text = self.welcome_page.click_button_and_get_text('Target Circle™')
-    #     assert button_text == 'Target Circle™', 'Target Circle™ button text is not as expected'
-    #     print('Target Circle™ button excsits')
-    #
-    #
-    # def test_finding_store(self):
-    #     self.driver.find_element(By.ID, "utilityNav-findStores").click()
-    #     self.driver.find_element(By.CSS_SELECTOR,"button[class='styles_ndsBaseButton__4Gp2_ styles_md__Lvk4a styles_ndsButton__XOOOH styles_md__Yc3tr styles_outlined__2a7ys']").click()
-    #
-    #     entering_city_name=self.driver.find_element(By.ID,"city")
-    #     entering_city_name.send_keys('NYC')
-    #
-    #     choose_state=self.driver.find_element(By.ID,'state')
-    #     choose_state_as_drop_down = Select(choose_state)
-    #     choose_state_as_drop_down.select_by_visible_text('NC')
-    #     time.sleep(3)
-    #     self.driver.find_element(By.CSS_SELECTOR,'div[class="styles_ndsCol__Bq1x9"]').click()
-    #
-    #
-    #
-    #
-    # def test_asking_for_help(self):
-    #
-    #
 
 
 
