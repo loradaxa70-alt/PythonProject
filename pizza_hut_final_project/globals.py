@@ -1,0 +1,6 @@
+CONTACT_BUTTON='Contact us'
+RESTURANTS_BUTTON='Restaurants by state'
+FAQS_BUTTON='FAQs'
+GIFT_CARDS_BUTTON='Gift cards'
+SITEMAP_BUTTON='Sitemap'
+FIND_STORE_BUTTON='Pizza Hut Store Finder'
