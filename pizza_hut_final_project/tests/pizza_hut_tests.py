@@ -7,6 +7,8 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 
+from pizza_hut_final_project.globals import CONTACT_BUTTON, RESTURANTS_BUTTON, FAQS_BUTTON, GIFT_CARDS_BUTTON, \
+    SITEMAP_BUTTON, FIND_STORE_BUTTON
 from pizza_hut_final_project.pages.welcome_page import WelcomePage
 from pizza_hut_final_project.tests.pizza_hut_selenium_base import pizza_hut_selenium_base
 
@@ -30,29 +32,29 @@ class PizzaHutTests (unittest.TestCase):
 
 
     def test_customerservice_buttons_exist(self):
-        button_text=self.welcome_page.click_button_and_get_text('Contact us')
+        button_text=self.welcome_page.click_button_and_get_text(CONTACT_BUTTON)
         assert button_text == 'Contact us', 'Contact us button text is not as expected'
-        print('Contact us button excsits')
+        print('Contact us button exists')
 
-        button_text = self.welcome_page.click_button_and_get_text('Restaurants by state')
+        button_text = self.welcome_page.click_button_and_get_text(RESTURANTS_BUTTON)
         assert button_text == 'Restaurants by state', 'Restaurants by state button text is not as expected'
-        print('Restaurants by state button excsits')
+        print('Restaurants by state button exists')
 
-        button_text = self.welcome_page.click_button_and_get_text('FAQs')
+        button_text = self.welcome_page.click_button_and_get_text(FAQS_BUTTON)
         assert button_text == 'FAQs', 'FAQs button text is not as expected'
-        print('FAQs button excsits')
+        print('FAQs button exists')
 
-        button_text = self.welcome_page.click_button_and_get_text('Gift cards')
+        button_text = self.welcome_page.click_button_and_get_text(GIFT_CARDS_BUTTON)
         assert button_text == 'Gift cards', 'Gift cards button text is not as expected'
-        print('Gift cards button excsits')
+        print('Gift cards button exists')
 
-        button_text = self.welcome_page.click_button_and_get_text('Sitemap')
+        button_text = self.welcome_page.click_button_and_get_text(SITEMAP_BUTTON)
         assert button_text == 'Sitemap', 'Sitemap button text is not as expected'
-        print('Sitemap button excsits')
+        print('Sitemap button exists')
 
-        button_text = self.welcome_page.click_button_and_get_text('Pizza Hut Store Finder')
+        button_text = self.welcome_page.click_button_and_get_text(FIND_STORE_BUTTON)
         assert button_text == 'Pizza Hut Store Finder', 'Pizza Hut Store Finder button text is not as expected'
-        print('Pizza Hut Store Finder button excsits')
+        print('Pizza Hut Store Finder button exists')
 
 
 
@@ -88,7 +90,7 @@ class PizzaHutTests (unittest.TestCase):
         location_field.send_keys('10001')
         search_button=self.driver.find_elements(By.CSS_SELECTOR,'button[class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-fullWidth css-aoy6ko"]')[0]
         search_button.click()
-        right_location=self.driver.find_element(By.CSS_SELECTOR,'div["MuiGrid-root MuiGrid-item css-1wxaqej"]')
+        right_location=self.driver.find_element(By.CSS_SELECTOR,'div[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root jss4019 MuiAccordion-rounded jss4020 Mui-expanded MuiAccordion-gutters css-d6an0n"]')
         right_location_reading=right_location.text
         assert 'NEW YORK, NY 10011' in right_location_reading, 'location text is not as expected'
         print('location text is as expected')
