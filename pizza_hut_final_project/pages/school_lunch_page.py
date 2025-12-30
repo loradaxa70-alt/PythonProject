@@ -2,6 +2,7 @@
 
 from selenium.webdriver.common.by import By
 
+from pizza_hut_final_project.locators import SchoolLunchPageLocators
 
 
 class SchoolLunchPage():
@@ -9,4 +10,4 @@ class SchoolLunchPage():
         self.driver = driver
 
     def clicking_on_school_lunch_button(self):
-        self.driver.find_element(By.LINK_TEXT, "School lunch").click()
+        self.driver.find_element(*SchoolLunchPageLocators.CLICK_ON_SCHOOL_LUNCH).click()
