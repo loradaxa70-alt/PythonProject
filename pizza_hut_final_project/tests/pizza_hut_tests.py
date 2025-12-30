@@ -9,8 +9,11 @@ from selenium.webdriver.support.select import Select
 
 from pizza_hut_final_project.globals import CONTACT_BUTTON, RESTURANTS_BUTTON, FAQS_BUTTON, GIFT_CARDS_BUTTON, \
     SITEMAP_BUTTON, FIND_STORE_BUTTON
+from pizza_hut_final_project.locators import PizzaHutTestsLocators
 from pizza_hut_final_project.pages.welcome_page import WelcomePage
+from pizza_hut_final_project.pages.school_lunch_page import SchoolLunchPage
 from pizza_hut_final_project.tests.pizza_hut_selenium_base import pizza_hut_selenium_base
+
 
 
 class PizzaHutTests (unittest.TestCase):
@@ -18,6 +21,7 @@ class PizzaHutTests (unittest.TestCase):
         self.base = pizza_hut_selenium_base()
         self.driver = self.base.selenium_start_with_url('https://www.pizzahut.com/?msockid=14690bc54ccc666626111db34d256734')
         self.welcome_page=WelcomePage(self.driver)
+        self.school_lunch_page = SchoolLunchPage(self.driver)
 
     def tearDown(self):
         self.base.selenium_stop()
@@ -25,7 +29,8 @@ class PizzaHutTests (unittest.TestCase):
 
 
     def test_returning_to_welcome_page(self):
-        self.driver.find_element(By.LINK_TEXT,"School lunch").click()
+        self.school_lunch_page.clicking_on_school_lunch_button()
+        time.sleep(3)
         self.welcome_page.returning_to_welcome_page()
         print('back to welcome page successfully')
 
@@ -59,7 +64,7 @@ class PizzaHutTests (unittest.TestCase):
 
 
     def test_empty_shopping_cart(self):
-        shopping_cart=self.driver.find_element(By.CLASS_NAME,"css-1h8ch3n")
+        shopping_cart=self.driver.find_element(PizzaHutTestsLocators.SHOPPING_CART)
         text = shopping_cart.text
         counter = text.count("[0]")
         print('Shopping cart is empty')
@@ -69,7 +74,7 @@ class PizzaHutTests (unittest.TestCase):
 
     def test_pizza_menu_button(self):
         time.sleep(3)
-        pizza_menu_button=self.driver.find_elements(By.CSS_SELECTOR, 'div >div.css-ug2o6l > a')[1]
+        pizza_menu_button=self.driver.find_elements(PizzaHutTestsLocators.PIZZA_MENU)[1]
         pizza_menu_button_read =pizza_menu_button.text
         assert pizza_menu_button_read=='PIZZA MENU', 'Pizza menu button text is not as expected'
         print('Pizza menu button exsists')
@@ -83,14 +88,15 @@ class PizzaHutTests (unittest.TestCase):
 
 
     def test_finding_store(self):
-        carry_out_button=self.driver.find_element(By.CLASS_NAME,'css-1qy7znf')
+        time.sleep(3)
+        carry_out_button=self.driver.find_element(PizzaHutTestsLocators.CARRY_OUT_BUTTON)
         time.sleep(4)
         carry_out_button.click()
-        location_field=self.driver.find_element(By.ID,"carryout-city-state-zip")
+        location_field=self.driver.find_element(PizzaHutTestsLocators.LOCATION_FIELD)
         location_field.send_keys('10001')
-        search_button=self.driver.find_elements(By.CSS_SELECTOR,'button[class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-fullWidth css-aoy6ko"]')[0]
+        search_button=self.driver.find_elements(PizzaHutTestsLocators.SEARCH_BUTTON)[0]
         search_button.click()
-        right_location=self.driver.find_element(By.CSS_SELECTOR,'div[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root jss4019 MuiAccordion-rounded jss4020 Mui-expanded MuiAccordion-gutters css-d6an0n"]')
+        right_location=self.driver.find_element(PizzaHutTestsLocators.RIGHT_LOCATION)
         right_location_reading=right_location.text
         assert 'NEW YORK, NY 10011' in right_location_reading, 'location text is not as expected'
         print('location text is as expected')
