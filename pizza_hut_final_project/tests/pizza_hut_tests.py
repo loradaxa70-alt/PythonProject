@@ -1,15 +1,8 @@
 import time
 import unittest
-
-import self
-from cffi.cffi_opcode import CLASS_NAME
-from selenium.webdriver import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.select import Select
-
 from pizza_hut_final_project.globals import CONTACT_BUTTON, RESTURANTS_BUTTON, FAQS_BUTTON, GIFT_CARDS_BUTTON, \
     SITEMAP_BUTTON, FIND_STORE_BUTTON
-from pizza_hut_final_project.locators import PizzaHutTestsLocators
+from pizza_hut_final_project.pages.pizza_menu_page import PizzaMenuPage
 from pizza_hut_final_project.pages.welcome_page import WelcomePage
 from pizza_hut_final_project.pages.school_lunch_page import SchoolLunchPage
 from pizza_hut_final_project.tests.pizza_hut_selenium_base import pizza_hut_selenium_base
@@ -22,17 +15,17 @@ class PizzaHutTests (unittest.TestCase):
         self.driver = self.base.selenium_start_with_url('https://www.pizzahut.com/?msockid=14690bc54ccc666626111db34d256734')
         self.welcome_page=WelcomePage(self.driver)
         self.school_lunch_page = SchoolLunchPage(self.driver)
+        self.pizza_menu_page = PizzaMenuPage(self.driver)
 
     def tearDown(self):
         self.base.selenium_stop()
 
 
-
     def test_returning_to_welcome_page(self):
         self.school_lunch_page.clicking_on_school_lunch_button()
-        time.sleep(3)
         self.welcome_page.returning_to_welcome_page()
-        print('back to welcome page successfully')
+        url= self.driver.current_url
+        assert url=='https://www.pizzahut.com/', 'url is incorrect'
 
 
 
@@ -64,42 +57,29 @@ class PizzaHutTests (unittest.TestCase):
 
 
     def test_empty_shopping_cart(self):
-        shopping_cart=self.driver.find_element(PizzaHutTestsLocators.SHOPPING_CART)
-        text = shopping_cart.text
-        counter = text.count("[0]")
-        print('Shopping cart is empty')
-        assert counter ==0 , "Shopping Cart did not include 0 "
+        counter=self.welcome_page.empty_shopping_cart()
+        assert counter == 0, 'Shopping cart text is not as expected'
 
 
 
     def test_pizza_menu_button(self):
         time.sleep(3)
-        pizza_menu_button=self.driver.find_elements(PizzaHutTestsLocators.PIZZA_MENU)[1]
-        pizza_menu_button_read =pizza_menu_button.text
-        assert pizza_menu_button_read=='PIZZA MENU', 'Pizza menu button text is not as expected'
-        print('Pizza menu button exsists')
+        pizza_menu_text=self.welcome_page.find_pizza_menu_button()
+        assert pizza_menu_text == 'PIZZA MENU', 'Pizza menu button text is not as expected'
 
 
 
     def test_pizza_menu_url(self):
-        self.driver.get('https://www.pizzahut.com/menu/pizza')
-        print('correct url to pizza menu')
+        self.pizza_menu_page.enter_pizza_menu_page()
+        url = self.driver.current_url
+        assert url == 'https://www.pizzahut.com/menu/pizza', 'pizza menu url is not as expected'
 
 
 
     def test_finding_store(self):
         time.sleep(3)
-        carry_out_button=self.driver.find_element(PizzaHutTestsLocators.CARRY_OUT_BUTTON)
-        time.sleep(4)
-        carry_out_button.click()
-        location_field=self.driver.find_element(PizzaHutTestsLocators.LOCATION_FIELD)
-        location_field.send_keys('10001')
-        search_button=self.driver.find_elements(PizzaHutTestsLocators.SEARCH_BUTTON)[0]
-        search_button.click()
-        right_location=self.driver.find_element(PizzaHutTestsLocators.RIGHT_LOCATION)
-        right_location_reading=right_location.text
-        assert 'NEW YORK, NY 10011' in right_location_reading, 'location text is not as expected'
-        print('location text is as expected')
+        correct_location_read=self.welcome_page.find_store()
+        assert 'NEW YORK, NY 10011' in correct_location_read, 'location text is not as expected'
 
 
 
